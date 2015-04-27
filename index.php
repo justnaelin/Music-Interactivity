@@ -2,6 +2,7 @@
 <html>
 <head>
 	<link rel="stylesheet" href="styles.css" type=text/css" >
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 
 <body>
@@ -84,17 +85,50 @@ class rColor
 
 }
 
-for($i = 0; $i < 30; $i++)
+for($i = 1; $i < 31; $i++)
 {
 
 	echo "<tr>";
-	for($j = 0; $j < 50; $j++)
+	for($j = 1; $j < 51; $j++)
 	{	
-    	echo '<td style="background-color: ', rColor::generate() , '">','</td>';
+		$id = $i*$j;
+    	echo '<td id="'.$id.'", style="background-color: ', rColor::generate() , '">','</td>';
 	} 
 	echo "</tr>";
 }
 ?>
+
+<script>
+var lastClickedTD = null;
+$("td").click (function(event){
+	event.target.style.border = "solid #0000FF";
+	if(event.target == lastClickedTD)
+	{
+		event.target.style.border = "";
+		lastClickedTD = null;
+	}
+	else if(lastClickedTD == null)
+	{	
+		lastClickedTD = event.target;
+	}
+	else
+	{
+		var tempcolor;
+		var tempID;
+		tempcolor = event.target.style.backgroundColor;
+		tempID = event.target.id;
+		event.target.style.backgroundColor = lastClickedTD.style.backgroundColor;
+		event.target.id = lastClickedTD.id;
+		lastClickedTD.style.backgroundColor = tempcolor;
+		lastClickedTD.id = tempID;
+		event.target.style.border = "solid #0000FF";
+		lastClickedTD.style.border = "";
+		lastClickedTD = null;
+	}
+		
+	
+})
+</script>
 </table>
 </body>
 </html>
