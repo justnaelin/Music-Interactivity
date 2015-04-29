@@ -3,10 +3,55 @@
 
 <head>
 	<link rel="stylesheet" href="styles.css" type=text/css" >
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
-
 <body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src='remix.js'></script>
+	<script type="text/javascript">
+
+var apiKey = 'GWRU3T1ZZ0D0FDZRI';
+var trackID = 'TRCYWPQ139279B3308';
+var trackURL = 'test.mp3'
+
+var remixer;
+var player;
+var track;
+var remixed;
+
+function init() {
+    var contextFunction = window.AudioContext || window.webkitAudioContext;
+    if (contextFunction === undefined) {
+        $("#info").text("Sorry, this app needs advanced web audio. Your browser doesn't"
+            + " support it. Try the latest version of Chrome?");
+    } else {
+        var context = new contextFunction();
+        remixer = createJRemixer(context, $, apiKey);
+        player = remixer.getPlayer();
+        $("#info").text("Loading analysis data...");
+
+        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+            track = t;
+
+            $("#info").text(percent + "% of the track loaded");
+            if (percent == 100) {
+                $("#info").text(percent + "% of the track loaded, remixing...");
+            }
+
+            if (track.status == 'ok') {
+                remixed = new Array();
+                // Do the remixing here!
+                for (var i=0; i < track.analysis.beats.length; i++) {
+                        remixed.push(track.analysis.beats[i])
+                }
+                $("#info").text("Remix complete!");
+            }
+        });
+    }
+}
+
+window.onload = init;
+</script>
+
 <table>
 <?php
 // Randomize grid colours
@@ -88,6 +133,7 @@ class rColor
 }
 
 // Setup grid
+$id = 0;
 for($i = 1; $i < 31; $i++)
 {
 	echo "<tr>";
@@ -103,6 +149,7 @@ for($i = 1; $i < 31; $i++)
 <script>
 // Allows swapping of squares
 var lastClickedTD = null;
+// When a square is clicked, do this:
 $("td").click (function(event){
 	event.target.style.border = "solid #0000FF";
 	if(event.target == lastClickedTD)
@@ -127,11 +174,15 @@ $("td").click (function(event){
 		event.target.style.border = "solid #0000FF";
 		lastClickedTD.style.border = "";
 		lastClickedTD = null;
-	}
-		
-	
+	}	
 })
+
 </script>
+
 </table>
+
+<div id='info'> </div>
+<!--<td onClick="player.play(0, remixed);"></td>
+<td onClick="player.stop()">Stop!</td>-->
 </body>
 </html>
