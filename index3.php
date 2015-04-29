@@ -171,7 +171,7 @@ $("td").click (function(event){
 		event.target.id = lastClickedTD.id;
 		lastClickedTD.style.backgroundColor = tempcolor;
 		lastClickedTD.id = tempID;
-		event.target.style.border = "solid #0000FF";
+		event.target.style.border = "";
 		lastClickedTD.style.border = "";
 		lastClickedTD = null;
 	}	
