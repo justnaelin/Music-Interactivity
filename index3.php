@@ -47,11 +47,12 @@ function init() {
             }
         });
     }
+	window.location = "index3.php?length=" + remixed.length;
 }
 
 window.onload = init;
 </script>
-
+<div id='info'> </div>
 <table>
 <?php
 // Randomize grid colours
@@ -134,27 +135,46 @@ class rColor
 
 // Setup grid
 $id = 0;
-for($i = 1; $i < 31; $i++)
+if(isset($_GET["length"])) 
 {
-	echo "<tr>";
-	for($j = 1; $j < 31; $j++)
-	{	
-		$id = $i*$j; // Give each square a unique ID
-    	echo '<td id="'.$id.'", style="background-color: ', rColor::generate(), '">', '</td>';
-		//echo '<td id="id", onClick="player.play(0, remixed);"></td>'
-	} 
-	echo "</tr>";
+	$length = $_GET["length"];
+	for($i = 1; $i < 30; $i++)
+	{
+		echo "<tr>";
+		for($j = 1; $j < $length / 30; $j++)
+		{	
+			$id = $i*$j; // Give each square a unique ID
+			echo '<td id="'.$id.'", style="background-color: ', rColor::generate(), '">', '</td>';
+			//echo '<td id="id", onClick="player.play(0, remixed);"></td>'
+		} 
+		echo "</tr>";
+	}	
 }
+
 ?>
 
 <script>
 
 // Allows swapping of squares
 var lastClickedTD = null;
+
 // When a square is clicked, do this:
 $("td").click (function(event){
 	event.target.style.border = "solid #0000FF";
+	var id = event.target.id;
 	
+
+	(function audioLoop (i) 
+	{          
+		setTimeout(function () 
+		{
+		player.play(0, remixed[id]); 
+		id++; 
+				  	
+		  if (--i) audioLoop(i);     
+	   }, remixed[++id].track.audio_summary.duration)
+	})(remixed.length);                        
+
 	if(event.target == lastClickedTD)
 	{
 		event.target.style.border = "";
@@ -177,19 +197,9 @@ $("td").click (function(event){
 		event.target.style.border = "";
 		lastClickedTD.style.border = "";
 		lastClickedTD = null;
+
 	}	
-	var id = event.target.id;
-	for(var i = 0; i < remixed.length; i++) 
-	{
-		//player.play(0, remixed[id]);
-		//id++;
-		//var duration = parseFloat(remixed[id].track.audio_summary.duration);
-		//setInterval(function () {player.play(0, remixed[id])}, 311.04);
-		setInterval(function () {
-			player.play(0, remixed[id]);
-		}, 311.04);
-		id++;
-	}	
+
 })
 
 </script>
