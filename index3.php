@@ -11,7 +11,7 @@
 
 var apiKey = 'GWRU3T1ZZ0D0FDZRI';
 var trackID = 'TRCYWPQ139279B3308';
-var trackURL = 'test.mp3';
+var trackURL = 'test.mp3'
 
 var remixer;
 var player;
@@ -145,9 +145,12 @@ $id = 0;
 	{
 		echo "<tr>";
 		for($j = 1; $j < 653 / 30; $j++)
-		{	
-			$id = $i*$j; // Give each square a unique ID
+		{
+			$id++;	
+			 // Give each square a unique ID
+			
 			echo '<td id="'.$id.'", style="background-color: ', rColor::generate(), '">', '</td>';
+
 			//echo '<td id="id", onClick="player.play(0, remixed);"></td>'
 		} 
 		echo "</tr>";
@@ -171,12 +174,12 @@ $(document).keydown(function(e){
     rePosition();
     return false;
 });
-    
-/*$('td').click(function(){
+/*    
+$('td').click(function(){
    active = $(this).closest('table').find('td').index(this);
    rePosition();
-});*/
-
+});
+*/
 
 function reCalculate(e){
     var rows = $('#navigate tr').length;
@@ -230,7 +233,7 @@ function reCalculate(e){
 }
 
 function rePosition(){
-    $('.active').css("background-color", origColor);
+    //$('.active').css("background-color", origColor);
 	//$('.active').removeClass('active');
 	//$('#navigate tr td').eq(prevActive).css("background-color", origColor);
     //$('#navigate tr td').eq(active).addClass('active');
@@ -258,11 +261,14 @@ var lastClickedTD = null;
 $("td").click (function(event){	
 	event.target.style.border = "solid #0000FF";
 	var id = event.target.id;
+  	active = $(this).closest('table').find('td').index(this);
+    //rePosition();
 
  		(function audioLoop (i) 
 		{          
 			setTimeout(function () 
 			{
+    		$('td').eq(id).css("background-color", "#FF0066");
 			player.play(0, remixed[id]); 
 			id++; 
 
