@@ -135,18 +135,46 @@ function reCalculate(e){
     if (e.keyCode == 37) { //move left or wrap
 		prevActive = active;        
 		active = (active>0)?active-1:active;
+
+			id = id - 1;
+            if (id < 0) {
+                id = remixed.length - 1;
+            }
+            player.play(0, remixed[id]);
+
     }
     if (e.keyCode == 38) { // move up
 		prevActive = active;        
 		active = (active-columns>=0)?active-columns:active;
+
+			id = id + 4;
+            if (id > remixed.length - 1) {
+                id = 0;
+            }
+
+            player.play(0, remixed[id]);
     }
     if (e.keyCode == 39) { // move right or wrap
 		prevActive = active;       
 		active = (active<(columns*rows)-1)?active+1:active;
+
+	        id = id + 1;
+            if (id > remixed.length - 1) {
+                id = 0;
+            }
+            player.play(0, remixed[id]);
+
     }
     if (e.keyCode == 40) { // move down
 		prevActive = active;        
 		active = (active+columns<=(rows*columns)-1)?active+columns:active;
+
+            id = id - 4;
+            if (id < 0) {
+                id = remixed.length - 1;
+            }
+            player.play(0, remixed[id]);
+
     }
 }
 
@@ -170,41 +198,6 @@ function scrollInView(){
         return false;
     }
 }
-
-/*
-var active;
-$("td").click (function(event){
-
-	document.addEventListener('keydown', function(e){
-		active = $('td.active').removeClass('active');
-		var x = active.index();
-		var y = active.closest('tr').index();
-		if (e.keyCode == 37) { 
-		   x--;
-
-		}
-		if (e.keyCode == 38) {
-		    y--;
-
-		}
-		if (e.keyCode == 39) { 
-		    x++
-
-		}
-		if (e.keyCode == 40) {
-		    y++
-
-		}
-
-
-		active = $('tr').eq(y).find('td').eq(x).addClass('active');
-		//document.getElementById('td').style.backgroundColor = "red";
-
-
-	});*/
-
-
-//});
 </script>
 </body>
 </html>

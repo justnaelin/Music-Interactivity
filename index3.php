@@ -43,13 +43,14 @@ function init() {
                     remixed.push(track.analysis.beats[i])
                 }
                 $("#info").text("Remix complete!");
-
+				
             }
-        });
-    
-    }
-				//window.location = "index3.php?length=" + remixed.length;
 
+        });
+
+    }
+
+    	//window.location = "index3.php?length=" + remixed.length;
 }
 window.onload = init;
 
@@ -139,7 +140,7 @@ class rColor
 $id = 0;
 //if(isset($_GET["length"])) 
 //{
-	//$length = $_GET["length"];
+	$length = $_GET["length"];
 	for($i = 1; $i < 30; $i++)
 	{
 		echo "<tr>";
@@ -156,9 +157,11 @@ $id = 0;
 ?>
 
 <script>
+// Highlight
 var active = 0;
 var origColor = $('#navigate tr td').eq(active).css("background-color");
 var prevActive = active;
+
 
 $('#navigate td').each(function(idx){$(this).html();});
 rePosition();
@@ -169,10 +172,10 @@ $(document).keydown(function(e){
     return false;
 });
     
-$('td').click(function(){
+/*$('td').click(function(){
    active = $(this).closest('table').find('td').index(this);
    rePosition();
-});
+});*/
 
 
 function reCalculate(e){
@@ -181,20 +184,48 @@ function reCalculate(e){
     //alert(columns + 'x' + rows);
     
     if (e.keyCode == 37) { //move left or wrap
-		prevActive = active;        
-		active = (active>0)?active-1:active;
+		//prevActive = active;        
+		//active = (active>0)?active-1:active;
+
+			active = active - 1;
+            if (active < 0) {
+                active = remixed.length - 1;
+            }
+            player.play(0, remixed[active]);
+
     }
     if (e.keyCode == 38) { // move up
-		prevActive = active;        
-		active = (active-columns>=0)?active-columns:active;
+		//prevActive = active;        
+		//active = (active-columns>=0)?active-columns:active;
+
+			active = active + 4;
+            if (active > remixed.length - 1) {
+                active = 0;
+            }
+
+           player.play(0, remixed[active]);
     }
     if (e.keyCode == 39) { // move right or wrap
-		prevActive = active;       
-		active = (active<(columns*rows)-1)?active+1:active;
+		//prevActive = active;       
+		//active = (active<(columns*rows)-1)?active+1:active;
+
+	        active = active + 1;
+            if (active > remixed.length - 1) {
+                active = 0;
+            }
+           player.play(0, remixed[active]);
+
     }
     if (e.keyCode == 40) { // move down
-		prevActive = active;        
-		active = (active+columns<=(rows*columns)-1)?active+columns:active;
+		//prevActive = active;        
+		//active = active+columns <= (rows*columns)-1)?active+columns:active;
+
+            active = active + columns;
+            if (active < 0) {
+                active = remixed.length - 1;
+            }
+           player.play(0, remixed[active]);
+
     }
 }
 
@@ -219,103 +250,15 @@ function scrollInView(){
     }
 }
 
-/*
-var active;
-$("td").click (function(event){
-
-	document.addEventListener('keydown', function(e){
-		active = $('td.active').removeClass('active');
-		var x = active.index();
-		var y = active.closest('tr').index();
-		if (e.keyCode == 37) { 
-		   x--;
-
-		}
-		if (e.keyCode == 38) {
-		    y--;
-
-		}
-		if (e.keyCode == 39) { 
-		    x++
-
-		}
-		if (e.keyCode == 40) {
-		    y++
-
-		}
-
-
-		active = $('tr').eq(y).find('td').eq(x).addClass('active');
-		//document.getElementById('td').style.backgroundColor = "red";
-
-
-	});*/
-
-
-//});
 
 // Allows swapping of squares
 var lastClickedTD = null;
 
 // When a square is clicked, do this:
-$("td").click (function(event){
+$("td").click (function(event){	
 	event.target.style.border = "solid #0000FF";
 	var id = event.target.id;
-	player.play(0, remixed[id]);
 
-	// Set up the keyboard controls after square is clicked
-  document.addEventListener('keydown', function(e){
-    active = $('td.active').removeClass('active');
-    var x = active.index();
-    var y = active.closest('tr').index();
-
-
-		if (e.which == 39) {  // right arrow
-           	id = id + 1;
-            if (id > remixed.length - 1) {
-                id = 0;
-            }
-            player.play(0, remixed[id]);
-
-        }
-
-        if (e.which == 37) {  // left arrow
-            id = id - 1;
-            if (id < 0) {
-                id = remixed.length - 1;
-            }
-            player.play(0, remixed[id]);
-
-        }
-
-        if (e.which == 40) {  // down arrow
-            id = id - 4;
-            if (id < 0) {
-                id = remixed.length - 1;
-            }
-            player.play(0, remixed[id]);
-
-			
-        }
-
-        if (e.which == 38) {  // up arrow
-            id = id + 4;
-            if (id > remixed.length - 1) {
-                id = 0;
-            }
-
-            player.play(0, remixed[id]);
-
-
-        }
-		active = $('tr').eq(y).find('td').eq(x).addClass('active');
-
-
-
-});
-	
-	
-/*
  		(function audioLoop (i) 
 		{          
 			setTimeout(function () 
@@ -328,7 +271,8 @@ $("td").click (function(event){
 		   }, 479)
 		})(remixed.length); 
 
-*/
+
+
 	if(event.target == lastClickedTD)
 	{
 		event.target.style.border = "";
@@ -362,10 +306,5 @@ $("td").click (function(event){
 </script>
 
 </table>
-
-
-<!--<td onClick="player.play(0, remixed);"
-</td>
-<td onClick="player.stop()">Stop!</td>-->
 </body>
 </html>
