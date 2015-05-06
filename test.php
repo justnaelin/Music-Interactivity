@@ -110,12 +110,13 @@ echo '<td id="'.$id.'", style="background-color: ', rColor::generate(), '">', '<
 <script>
 var active = 0;
 var origColor = $('#navigate tr td').eq(active).css("background-color");
-var prevActive = active;
+var prevActive = null;
 
 $('#navigate td').each(function(idx){$(this).html();});
 rePosition();
 
 $(document).keydown(function(e){
+    $('#navigate tr td').eq(0).css("background-color", "#FFFFFF");
     reCalculate(e);
     rePosition();
     return false;
@@ -151,9 +152,8 @@ function reCalculate(e){
 }
 
 function rePosition(){
-    $('.active').css("background-color", origColor);
-	//$('.active').removeClass('active');
-	//$('#navigate tr td').eq(prevActive).css("background-color", origColor);
+    //$('.active').removeClass('active');
+	$('#navigate tr td').eq(prevActive).css("background-color", "#FFFFFF");
     //$('#navigate tr td').eq(active).addClass('active');
 	//origColor = $('#navigate tr td').eq(active).css("background-color");
     $('#navigate tr td').eq(active).css("background-color", "#FF0066");
