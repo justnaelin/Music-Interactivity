@@ -4,6 +4,9 @@
 <head>
 	<link rel="stylesheet" href="styles.css" type=text/css" >
 </head>
+
+<h1>Music Interaction</h1>
+
 <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script type="text/javascript" src='remix.js'></script>
@@ -19,7 +22,7 @@ var player;
 var track;
 var remixed;
 
-$(function(){ //first button  song: ignition/doyou
+$(function(){ //first button  song: ignition/do you
 $('#button').click(function()
 	{	
 		trackID = 'TRCYWPQ139279B3308';
@@ -73,6 +76,8 @@ function init() {
                     remixed.push(track.analysis.beats[i])
                 }
                 $("#info").text("Remix complete!");
+				// Gets the length of the array holding the song to be used in PHP  				
+				window.location = "/home/javascript-remix-idk/index3.php?length=" + remixed.length;
 				
             }
 
@@ -80,7 +85,7 @@ function init() {
 
     }
 
-   //window.location = "index3.php?length=" + remixed.length;
+
 }
  //window.onload = init;
 
@@ -177,13 +182,13 @@ class rColor
 
 // Setup grid
 $id = 0;
-//if(isset($_GET["length"])) 
-//{
+if(isset($_GET["length"])) 
+{
 	$length = $_GET["length"];
 	for($i = 1; $i < 30; $i++)
 	{
 		echo "<tr>";
-		for($j = 1; $j < 650 / 30; $j++)
+		for($j = 1; $j < $length / 30; $j++)
 		{
 			$id++;	
 			 // Give each square a unique ID		
@@ -192,7 +197,7 @@ $id = 0;
 		} 
 		echo "</tr>";
 	}	
-//}
+}
 
 ?>
 
@@ -233,11 +238,9 @@ $('td').click(function(){
 function reCalculate(e){
     var rows = $('#navigate tr').length;
     var columns = $('#navigate tr:eq(0) td').length;
-    //alert(columns + 'x' + rows);
+
     
     if (e.keyCode == 37) { //move left or wrap
-		//prevActive = active;        
-		//active = (active>0)?active-1:active;
 
 			active = active - 1;
             if (active < 0) {
@@ -247,8 +250,6 @@ function reCalculate(e){
 
     }
     if (e.keyCode == 38) { // move up
-		//prevActive = active;        
-		//active = (active-columns>=0)?active-columns:active;
 			
 			active = active - columns;
 			//active = active + 1;
@@ -259,8 +260,6 @@ function reCalculate(e){
            player.play(0, remixed[active]);
     }
     if (e.keyCode == 39) { // move right or wrap
-		//prevActive = active;       
-		//active = (active<(columns*rows)-1)?active+1:active;
 
 	        active = active + 1;
             if (active > remixed.length - 1) {
@@ -270,8 +269,6 @@ function reCalculate(e){
 
     }
     if (e.keyCode == 40) { // move down
-		//prevActive = active;        
-		//active = active+columns <= (rows*columns)-1)?active+columns:active;
 
             active = active + columns;
             if (active < 0) {
@@ -336,8 +333,6 @@ $("td").click (function(event){
 
 
 	}	
-		
-
 	if(event.target == lastClickedTD)
 	{
 		event.target.style.border = "";
@@ -369,7 +364,7 @@ $("td").click (function(event){
 </script>
 
 </table>
-<h1>Music Interaction</h1>
+
 
 </body>
 </html>
