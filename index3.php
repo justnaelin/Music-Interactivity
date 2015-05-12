@@ -9,16 +9,44 @@
 	<script type="text/javascript" src='remix.js'></script>
 	<script type="text/javascript">
 
-var apiKey = 'GWRU3T1ZZ0D0FDZRI';
-var trackID = 'TRCYWPQ139279B3308';
-var trackURL = 'test1.mp3'
 
+// variables for track analysis using the echonest api
+var apiKey = 'CGKZP0UTLWFPUBKCI';
+var trackID;
+var trackURL;
 var remixer;
 var player;
-var player2;
 var track;
 var remixed;
 
+$(function(){ //first button  song: ignition/doyou
+$('#button').click(function()
+	{	
+		trackID = 'TRCYWPQ139279B3308';
+		console.log("I am inside the first if statement!!");
+		trackURL = 'test.mp3';
+		init();
+	});
+}); 
+$(function() { //second button song: idk the name
+	$('#button1').click( function()
+	{
+		trackID = 'TRBIBEW13936EB37C9';
+		alert("I am inside the second if statement!!");
+		trackURL = '1451_-_D.mp3';
+		init();
+	});
+}); 
+$(function(){ //third button song: Sail by Awolnation
+ 	$('#button2').click( function()
+	{	
+		trackID = 'TRWHQOK13B357AB74A';
+		alert("I am inside the third if statement!!");
+		trackURL = 'Sail.mp3';
+		init();
+	});
+});
+	
 function init() {
     var contextFunction = window.webkitAudioContext || window.AudioContext;
     if (contextFunction === undefined) {
@@ -54,13 +82,18 @@ function init() {
 
    //window.location = "index3.php?length=" + remixed.length;
 }
-window.onload = init;
+ //window.onload = init;
 
 </script>
 <div id='info'> </div>
+
 <button id='up' >+</button>
 <button id='down'>-</button>
 <div id='count'></div>
+
+<button id="button">song1</button>
+<button id="button1">song 2</button>
+<button id="button2">Sail</button> 
 
 <table id='navigate'>
 <?php
@@ -336,5 +369,7 @@ $("td").click (function(event){
 </script>
 
 </table>
+<h1>Music Interaction</h1>
+
 </body>
 </html>
