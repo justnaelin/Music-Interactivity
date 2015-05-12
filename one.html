@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset=utf-8>
@@ -45,11 +45,17 @@ function init() {
                 // Do the remixing here!
                 for (var i=0; i < track.analysis.beats.length; i++) {
                         remixed.push(track.analysis.beats[i])
+						console.log(remixed[i].track.audio_summary.duration);
                 }
                 $("#info").text("Remix complete!");
             }
         });
     }
+	/*for(var i = 0; i <remixed.length; i++)
+	{
+		console.log(remixed[i]);
+		//$("#info").text("im in the loop");
+	} */
 }
 
 window.onload = init;
