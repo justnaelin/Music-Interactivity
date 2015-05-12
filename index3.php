@@ -11,10 +11,11 @@
 
 var apiKey = 'GWRU3T1ZZ0D0FDZRI';
 var trackID = 'TRCYWPQ139279B3308';
-var trackURL = 'test.mp3'
+var trackURL = 'test1.mp3'
 
 var remixer;
 var player;
+var player2;
 var track;
 var remixed;
 
@@ -27,6 +28,7 @@ function init() {
         var context = new contextFunction();
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
+		player2 = remixer.getPlayer();
         $("#info").text("Loading analysis data...");
 
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
@@ -50,12 +52,16 @@ function init() {
 
     }
 
-    	//window.location = "index3.php?length=" + remixed.length;
+   //window.location = "index3.php?length=" + remixed.length;
 }
 window.onload = init;
 
 </script>
 <div id='info'> </div>
+<button id='up' >+</button>
+<button id='down'>-</button>
+<div id='count'></div>
+
 <table id='navigate'>
 <?php
 // Randomize grid colours
@@ -144,14 +150,12 @@ $id = 0;
 	for($i = 1; $i < 30; $i++)
 	{
 		echo "<tr>";
-		for($j = 1; $j < 653 / 30; $j++)
+		for($j = 1; $j < 650 / 30; $j++)
 		{
 			$id++;	
-			 // Give each square a unique ID
-			
-			echo '<td id="'.$id.'", style="background-color: ', rColor::generate(), '">', '</td>';
+			 // Give each square a unique ID		
+			echo '<td id="'.$id.'", style="background-color: ', rColor::generate(), '">','</td>';
 
-			//echo '<td id="id", onClick="player.play(0, remixed);"></td>'
 		} 
 		echo "</tr>";
 	}	
@@ -164,7 +168,7 @@ $id = 0;
 var active = 0;
 var origColor = $('#navigate tr td').eq(active).css("background-color");
 var prevActive = active;
-
+var counter = 1;
 
 $('#navigate td').each(function(idx){$(this).html();});
 rePosition();
@@ -173,6 +177,18 @@ $(document).keydown(function(e){
     reCalculate(e);
     rePosition();
     return false;
+});
+
+// Increments/decrements beat skipper
+$('#count').text("Skip beat by: " + counter);
+$('#up').click(function(){
+	counter++;
+	$('#count').text("Skip beat by: " + counter);
+});
+
+$('#down').click(function(){
+	counter--;
+	$('#count').text("Skip beat by: " + counter);
 });
 /*    
 $('td').click(function(){
@@ -200,9 +216,10 @@ function reCalculate(e){
     if (e.keyCode == 38) { // move up
 		//prevActive = active;        
 		//active = (active-columns>=0)?active-columns:active;
-
-			active = active + 4;
-            if (active > remixed.length - 1) {
+			
+			active = active - columns;
+			//active = active + 1;
+            if (active > remixed.length - 1){
                 active = 0;
             }
 
@@ -238,7 +255,7 @@ function rePosition(){
 	//$('#navigate tr td').eq(prevActive).css("background-color", origColor);
     //$('#navigate tr td').eq(active).addClass('active');
 	//origColor = $('#navigate tr td').eq(active).css("background-color");
-    $('#navigate tr td').eq(active).css("background-color", "#FF0066");
+   $('#navigate tr td').eq(active).css("background-color", "#FF0066");
     scrollInView();
 }
 
@@ -253,31 +270,40 @@ function scrollInView(){
     }
 }
 
-
 // Allows swapping of squares
 var lastClickedTD = null;
-
+var playerCounter = 0;
 // When a square is clicked, do this:
 $("td").click (function(event){	
 	event.target.style.border = "solid #0000FF";
 	var id = event.target.id;
   	active = $(this).closest('table').find('td').index(this);
-    //rePosition();
+	var origColor = $('td').eq(active).css("background-color");
+	playerCounter++;
+	
 
- 		(function audioLoop (i) 
-		{          
-			setTimeout(function () 
-			{
-    		$('td').eq(id).css("background-color", "#FF0066");
-			player.play(0, remixed[id]); 
-			id++; 
+	
+	if(playerCounter % 2 > 0) {
+	 		(function audioLoop (i) 
+			{          
+				setTimeout(function () 
+				{
 
-					  	
-			  if (--i) audioLoop(i);     
-		   }, 479)
-		})(remixed.length); 
+				$('td').eq(id - counter).css("background-color", origColor);
+				origColor = $('td').eq(id).css("background-color");
+				$('td').eq(id).css("background-color", "#FF0066");
+				player.play(0, remixed[id]); 
+				id = parseInt(id);
+				id += counter;
+		  		
+				if(playerCounter % 2 > 0) audioLoop(i);
+				//if (--i) audioLoop(i);
+			   }, 480/*parseInt(remixed[id].track.audio_summary.duration)*/)
+			})(remixed.length); 
 
 
+	}	
+		
 
 	if(event.target == lastClickedTD)
 	{
@@ -286,9 +312,7 @@ $("td").click (function(event){
 	}
 	else if(lastClickedTD == null)
 	{	
-
 		lastClickedTD = event.target;
-
 	}
 	else
 	{
