@@ -3,6 +3,7 @@
 
 <head>
 	<link rel="stylesheet" href="styles.css" type=text/css" >
+
 </head>
 
 <h1>Music Interaction</h1>
@@ -26,8 +27,8 @@ $(function(){ //first button  song: ignition/do you
 $('#button').click(function()
 	{	
 		trackID = 'TRCYWPQ139279B3308';
-		console.log("I am inside the first if statement!!");
-		trackURL = 'test.mp3';
+		trackURL = 'test1.mp3';
+		$('#song').text("Ignition / Do You - Phoebe Ryan");
 		init();
 	});
 }); 
@@ -35,8 +36,8 @@ $(function() { //second button song: idk the name
 	$('#button1').click( function()
 	{
 		trackID = 'TRBIBEW13936EB37C9';
-		alert("I am inside the second if statement!!");
 		trackURL = '1451_-_D.mp3';
+		$('#song').text("8-bit song");
 		init();
 	});
 }); 
@@ -44,14 +45,14 @@ $(function(){ //third button song: Sail by Awolnation
  	$('#button2').click( function()
 	{	
 		trackID = 'TRWHQOK13B357AB74A';
-		alert("I am inside the third if statement!!");
+		$('#song').text("Sail - Awolnation");
 		trackURL = 'Sail.mp3';
 		init();
 	});
 });
 	
 function init() {
-    var contextFunction = window.webkitAudioContext || window.AudioContext;
+    var contextFunction = window.AudioContext;
     if (contextFunction === undefined) {
         $("#info").text("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome?");
@@ -76,29 +77,26 @@ function init() {
                     remixed.push(track.analysis.beats[i])
                 }
                 $("#info").text("Remix complete!");
-				// Gets the length of the array holding the song to be used in PHP  				
-				window.location = "/home/javascript-remix-idk/index3.php?length=" + remixed.length;
-				
+				// Gets the length of the array holding the song to be used in PHP  	
+				//window.location = "index3.php?length=" + 700;
+
             }
-
         });
-
-    }
-
-
+    }			
 }
- //window.onload = init;
+
 
 </script>
+<div id='song'> </div>
 <div id='info'> </div>
+<div id='up' class="up">+</div>
+<div id='down' class="down">-</div>
+<div id='auto' class="auto">*</div>
 
-<button id='up' >+</button>
-<button id='down'>-</button>
+<button id="button">Song 1</button>
+<button id="button1">Song 2</button>
+<button id="button2">Song 3</button> 
 <div id='count'></div>
-
-<button id="button">song1</button>
-<button id="button1">song 2</button>
-<button id="button2">Sail</button> 
 
 <table id='navigate'>
 <?php
@@ -188,7 +186,22 @@ if(isset($_GET["length"]))
 	for($i = 1; $i < 30; $i++)
 	{
 		echo "<tr>";
-		for($j = 1; $j < $length / 30; $j++)
+		for($j = 1; $j < $length / 20; $j++)
+		{
+			$id++;	
+			 // Give each square a unique ID		
+			echo '<td id="'.$id.'", style="background-color: ', rColor::generate(), '">','</td>';
+
+		} 
+		echo "</tr>";
+	}	
+}
+else
+{
+	for($i = 1; $i < 30; $i++)
+	{
+		echo "<tr>";
+		for($j = 1; $j < 700 / 20; $j++)
 		{
 			$id++;	
 			 // Give each square a unique ID		
@@ -199,41 +212,60 @@ if(isset($_GET["length"]))
 	}	
 }
 
+
 ?>
 
 <script>
-// Highlight
+
 var active = 0;
 var origColor = $('#navigate tr td').eq(active).css("background-color");
 var prevActive = active;
 var counter = 1;
+var autoFlag = 2;
 
 $('#navigate td').each(function(idx){$(this).html();});
-rePosition();
 
 $(document).keydown(function(e){
     reCalculate(e);
-    rePosition();
+    $('#navigate tr td').eq(active).css("background-color", "#FF0066");
+    scrollInView();
     return false;
 });
 
-// Increments/decrements beat skipper
+
 $('#count').text("Skip beat by: " + counter);
-$('#up').click(function(){
+
+// Remixer buttons
+$('#up').click(function()
+{
 	counter++;
 	$('#count').text("Skip beat by: " + counter);
 });
 
-$('#down').click(function(){
+$('#down').click(function()
+{
 	counter--;
 	$('#count').text("Skip beat by: " + counter);
 });
-/*    
-$('td').click(function(){
-   active = $(this).closest('table').find('td').index(this);
-   rePosition();
+$('#auto').click(function()
+{
+		setInterval(function() 
+		{
+			var x = 1 + Math.floor(Math.random() * 4); // 1 to 4
+		 	var i = Math.floor(Math.random() * 4); // 0 to 4
+			counter = 0;
+			if(x >= 2)	
+			{	
+				counter = counter + i;	
+			}
+			else
+			{
+				counter = counter - i;
+			}	
+			$('#count').text("Skip beat by: " + counter);
+		},
+		1100);
 });
-*/
 
 function reCalculate(e){
     var rows = $('#navigate tr').length;
@@ -279,15 +311,6 @@ function reCalculate(e){
     }
 }
 
-function rePosition(){
-    //$('.active').css("background-color", origColor);
-	//$('.active').removeClass('active');
-	//$('#navigate tr td').eq(prevActive).css("background-color", origColor);
-    //$('#navigate tr td').eq(active).addClass('active');
-	//origColor = $('#navigate tr td').eq(active).css("background-color");
-   $('#navigate tr td').eq(active).css("background-color", "#FF0066");
-    scrollInView();
-}
 
 function scrollInView(){
     var target = $('#navigate tr td:eq('+active+')');
@@ -300,7 +323,6 @@ function scrollInView(){
     }
 }
 
-// Allows swapping of squares
 var lastClickedTD = null;
 var playerCounter = 0;
 // When a square is clicked, do this:
@@ -310,29 +332,26 @@ $("td").click (function(event){
   	active = $(this).closest('table').find('td').index(this);
 	var origColor = $('td').eq(active).css("background-color");
 	playerCounter++;
-	
 
-	
 	if(playerCounter % 2 > 0) {
 	 		(function audioLoop (i) 
 			{          
 				setTimeout(function () 
 				{
+					$('td').eq(id - counter).css("background-color", origColor);
+					origColor = $('td').eq(id).css("background-color");
+					$('td').eq(id).css("background-color", "#FF0066");
 
-				$('td').eq(id - counter).css("background-color", origColor);
-				origColor = $('td').eq(id).css("background-color");
-				$('td').eq(id).css("background-color", "#FF0066");
-				player.play(0, remixed[id]); 
-				id = parseInt(id);
-				id += counter;
-		  		
-				if(playerCounter % 2 > 0) audioLoop(i);
-				//if (--i) audioLoop(i);
+					player.play(0, remixed[id]); 
+					id = parseInt(id);
+					id += counter;
+			  		
+					if(playerCounter % 2 > 0) audioLoop(i);
+
 			   }, 480/*parseInt(remixed[id].track.audio_summary.duration)*/)
 			})(remixed.length); 
-
-
 	}	
+
 	if(event.target == lastClickedTD)
 	{
 		event.target.style.border = "";
