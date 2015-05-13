@@ -46,6 +46,16 @@ $(function(){ //third button song: Sail by Awolnation
 		init();
 	});
 });
+
+$(function(){ //fourth button  song: ignition/doyou
+	$('#button3').click(function()
+	{	
+		trackID = 'TRHIUST13B5695A3E4';
+		console.log("I am inside the fourth if statement!!");
+		trackURL = 'Madness.mp3';
+		init();
+	});
+}); 
 	
 function init() {
     var contextFunction = window.webkitAudioContext || window.AudioContext;
@@ -94,6 +104,7 @@ function init() {
 <button id="button">song1</button>
 <button id="button1">song 2</button>
 <button id="button2">Sail</button> 
+<button id="button3">Madness</button>
 
 <table id='navigate'>
 <?php
