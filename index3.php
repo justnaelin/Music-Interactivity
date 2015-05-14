@@ -113,7 +113,7 @@ function init() {
                 }
                 $("#info").text("Remix complete!");
 				// Gets the length of the array holding the song to be used in PHP  	
-				//window.location = "index3.php?length=" + 700;
+				//window.location = "index3.php?length=" + remixed.length;
 
             }
         });
@@ -256,12 +256,14 @@ else
 
 <script>
 
+// Keeps track of the current tile 
 var active = 0;
+// Saves the original color before it gets changed
 var origColor = $('#navigate tr td').eq(active).css("background-color");
-var prevActive = active;
+// Controls the beats
 var counter = 1;
-var autoFlag = 2;
 
+// Displays the value of each td
 $('#navigate td').each(function(idx){$(this).html();});
 
 // When the user presses a key
@@ -272,7 +274,7 @@ $(document).keydown(function(e){
     return false;
 });
 
-// Displays Skip beat by: 1
+// Displays "Skip beat by: 1"
 $('#count').text("Skip beat by: " + counter);
 
 // Remixer buttons
@@ -326,7 +328,6 @@ function reCalculate(e){
     if (e.keyCode == 38) { // move up
 			
 			active = active - columns;
-			//active = active + 1;
             if (active > remixed.length - 1){
                 active = 0;
             }
@@ -365,7 +366,9 @@ function scrollInView(){
     }
 }
 
+// Controls color swapping
 var lastClickedTD = null;
+// Controls playing and stopping the audio
 var playerCounter = 0;
 // When a square is clicked, do this:
 $("td").click (function(event){	
@@ -374,7 +377,8 @@ $("td").click (function(event){
   	active = $(this).closest('table').find('td').index(this);
 	var origColor = $('td').eq(active).css("background-color");
 	playerCounter++;
-
+	
+	// Plays the audio through a loop
 	if(playerCounter % 2 > 0) {
 	 		(function audioLoop (i) 
 			{          

@@ -1,3 +1,4 @@
+/* increment beat button */
 .up {
 	background-color:#ffec64;
 	-moz-border-radius:1px;
@@ -19,7 +20,7 @@
 	position:relative;
 	top:1px;
 }
-
+/* decrement beat button*/
 .down {
 	background-color:#fc8d83;
 	-moz-border-radius:1px;
@@ -42,7 +43,7 @@
 	top:1px;
 }
 
-
+/*random incrementation/decrementation button*/
 .auto {
 	background-color:#20e0e5;
 	-moz-border-radius:1px;
@@ -65,14 +66,23 @@
 	position:relative;
 	top:1px;
 }
+/* background */
 body {
     background-color:white;
 }
+/* grid */
 td 
 {
 	width: 15px;
 	height: 15px;
 }
+/* title*/
+h1{
+  font-weight:100;
+  color: black;
+  text-decoration: none;
+}
+/* song buttons */
 .button
 {
 	color: white;
@@ -83,11 +93,7 @@ td
 	-webkit-border-radius:1px;
 	border-radius:1px;
 }
-h1{
-  font-weight:100;
-  color: black;
-  text-decoration: none;
-}
+
 .button1
 {
 	color: white;
@@ -128,6 +134,7 @@ h1{
 	-webkit-border-radius:1px;
 	border-radius:1px;
 }
+/* name of song */
 #song 
 {
 	font-size:20px;
